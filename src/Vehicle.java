@@ -1,10 +1,10 @@
 public class Vehicle {
     private double max_volume;
     private double max_mass;
-    private long vehicle_id;
+    private int vehicle_id;
     private int max_speed;
 
-    public Vehicle(double max_volume, double max_mass, long vehicle_id, int max_speed) {
+    public Vehicle(double max_volume, double max_mass, int vehicle_id, int max_speed) {
         this.max_volume = max_volume;
         this.max_mass = max_mass;
         this.vehicle_id = vehicle_id;
@@ -27,11 +27,11 @@ public class Vehicle {
         this.max_mass = max_mass;
     }
 
-    public long getVehicle_id() {
+    public int getID() {
         return vehicle_id;
     }
 
-    public void setVehicle_id(long vehicle_id) {
+    public void setID(int vehicle_id) {
         this.vehicle_id = vehicle_id;
     }
 
