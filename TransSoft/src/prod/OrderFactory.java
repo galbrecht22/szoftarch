@@ -12,7 +12,7 @@ public class OrderFactory {
         return of;
     }
     public Order createOrder(Map<String, String> map){
-        int ID = Integer.parseInt((map.get("ID")));
+        //int ID = Integer.parseInt((map.get("ID")));
         double v = Double.parseDouble((map.get("volume")));
         double m = Double.parseDouble((map.get("mass")));
         Float from_lat = Float.parseFloat((map.get("from_lat")));
@@ -21,12 +21,9 @@ public class OrderFactory {
         Float to_lon = Float.parseFloat((map.get("to_lon")));
         float[] from = new float[]{from_lat, from_lon};
         float[] to = new float[]{to_lat, to_lon};
-        Integer year = Integer.parseInt((map.get("year")));
-        Integer month = Integer.parseInt((map.get("month")));
-        Integer day = Integer.parseInt((map.get("day")));
-        LocalDate d = LocalDate.of(year, month, day);
+        LocalDate d = LocalDate.parse(map.get("date"));
         Order o = new Order(v, m, from, to, d);
-        o.setID(ID);
+        //o.setID(ID);
         return o;
     }
 }

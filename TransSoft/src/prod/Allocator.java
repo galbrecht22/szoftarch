@@ -1,5 +1,6 @@
 package prod;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +18,7 @@ public class Allocator implements DistanceCalculator{
         return allocator;
     }
 
-    public static Map<Order, VehiclePark> compute(ArrayList<VehiclePark> vehicleParks, Queue<Order> orders){
+    public static Map<Order, VehiclePark> compute(ArrayList<VehiclePark> vehicleParks, ArrayList<Order> orders){
         Map<Order, VehiclePark> map = new HashMap<>();
         for(Order o: orders) {
             float minDistance = Float.MAX_VALUE;

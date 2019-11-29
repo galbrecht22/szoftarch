@@ -5,6 +5,15 @@ public class Vehicle {
     private double max_mass;
     private int vehicle_id;
     private int max_speed;
+    private int vehiclePark_id;
+    
+    public void setVehiclePark_ID(int vp_id) {
+    	vehiclePark_id = vp_id;
+    }
+    
+    public int getVehiclePark_ID() {
+    	return vehiclePark_id;
+    }
 
     public Vehicle(double max_volume, double max_mass, int vehicle_id, int max_speed) {
         this.max_volume = max_volume;
