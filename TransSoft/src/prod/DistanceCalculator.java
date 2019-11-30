@@ -2,7 +2,7 @@ package prod;
 
 public interface DistanceCalculator {
 
-	static float distFrom(final float lat1, final float lng1, final float lat2, final float lng2) {
+	public static float distFrom(final float lat1, final float lng1, final float lat2, final float lng2) {
 		double earthRadius = 6371000; // meters
 		double dLat = Math.toRadians(lat2 - lat1);
 		double dLng = Math.toRadians(lng2 - lng1);
@@ -13,7 +13,7 @@ public interface DistanceCalculator {
 		return (float) (earthRadius * c);
 	}
 
-	static float distFrom(final Coordinate from, final Coordinate to) {
+	public static float distFrom(final Coordinate from, final Coordinate to) {
 		return distFrom(from.getLatitude(), from.getLongitude(), to.getLatitude(), to.getLongitude());
 	}
 }

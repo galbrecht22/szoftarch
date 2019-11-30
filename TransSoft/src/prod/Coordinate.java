@@ -18,4 +18,11 @@ public class Coordinate {
 		return lat;
 	}
 
+	public String toString() {
+		return "Coordinate, latitude: " + lat  + ", longitude: " + lon + " ";  
+	}
+
+	public boolean equals(OrderCoordinate oc) {
+		return (getLatitude() == oc.getLatitude() && getLongitude() == oc.getLongitude());
+	}
 }

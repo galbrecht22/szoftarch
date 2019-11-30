@@ -16,17 +16,18 @@ public class Order {
 
 	private double volume;
 	private double mass;
-	private Coordinate from;
-	private Coordinate to;
+	private OrderCoordinate from;
+	private OrderCoordinate to;
 	private LocalDate when;
 
-	public Order(final double volume, final double mass, final Coordinate from, final Coordinate to,
-			final LocalDate when) {
+	public Order(final double volume, final double mass, final OrderCoordinate from, final OrderCoordinate to,
+			final LocalDate when, final int id) {
 		this.volume = volume;
 		this.mass = mass;
 		this.from = from;
 		this.to = to;
 		this.when = when;
+		this.id = id;
 	}
 
 	public double getVolume() {
@@ -49,7 +50,7 @@ public class Order {
 		return from;
 	}
 
-	public void setFrom(final Coordinate from) {
+	public void setFrom(final OrderCoordinate from) {
 		this.from = from;
 	}
 
@@ -57,7 +58,7 @@ public class Order {
 		return to;
 	}
 
-	public void setTo(final Coordinate to) {
+	public void setTo(final OrderCoordinate to) {
 		this.to = to;
 	}
 

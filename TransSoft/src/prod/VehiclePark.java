@@ -1,14 +1,13 @@
 package prod;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Queue;
+import java.util.List;
 
 public class VehiclePark {
 	private ArrayList<Vehicle> vehicles;
 	private Coordinate location;
-	private Queue<Order> queue = new ArrayDeque<>();
+	private List<Order> orders = new ArrayList<>();
 	private int id;
 
 	public VehiclePark() {
@@ -23,8 +22,16 @@ public class VehiclePark {
 		this.id = id;
 	}
 
-	public void addPackToQueue(Order o) {
-		queue.add(o);
+	public void addOrderToQueue(Order o) {
+		orders.add(o);
+	}
+
+	public void addOrders(final Collection<Order> orders) {
+		orders.addAll(orders);
+	}
+
+	public List<Order> getOrders() {
+		return orders;
 	}
 
 	public Coordinate getLocation() {
@@ -39,7 +46,7 @@ public class VehiclePark {
 		vehicles.add(v);
 	}
 
-	public void addVehicles(final Collection<Vehicle> col) {
+	private void addVehicles(final Collection<Vehicle> col) {
 		vehicles.addAll(col);
 	}
 
@@ -63,5 +70,33 @@ public class VehiclePark {
 			}
 		}
 		return null;
+	}
+
+	public int getUnusedVehicles() {
+		int unused = 0;
+		for(Vehicle v : vehicles) {
+			if(v.getMax_mass() == v.getRemainingMass()) {
+				unused++;
+			}
+		}
+		return unused;
+	}
+
+	public VehiclePark copy() {
+		final VehiclePark vp = new VehiclePark();
+		vp.setID(getID());
+		vp.setLocation(getLocation());
+		vp.addVehicles(getVehicles());
+		vp.addOrders(getOrders());
+		return vp;
+	}
+
+	public String toString() {
+		final StringBuilder builder = new StringBuilder();
+		builder.append(getID()).append(getLocation());
+		for(Order o : orders) {
+			builder.append(o.getID());
+		}
+		return builder.toString();
 	}
 }

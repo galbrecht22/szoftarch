@@ -1,6 +1,7 @@
 package prod;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContextListener;
@@ -52,9 +53,7 @@ public class Controller implements ServletContextListener {
 		ArrayList<Order> orders = dbService.getOrders();
 		ArrayList<VehiclePark> vehicleParks = vehicleRegistry.getVehicleParks();
 
-		Map<Order, VehiclePark> map = Allocator.compute(vehicleParks, orders);
-
-		map.forEach((key, value) -> System.out.println(key.getID() + " " + value.getID()));
-
+		List<VehiclePark> vPs = Allocator.compute(vehicleParks, orders);
+		vPs.forEach((vP) -> System.out.println(vP.toString()));
 	}
 }

@@ -241,11 +241,10 @@ public class DBService {
               float to_lon = rs.getFloat("to_lon");
               String date = rs.getString("dateof_tr");
               
-              final Coordinate from = new Coordinate(from_lat, from_lon);
-              Coordinate to = new Coordinate(to_lat, to_lon);
+              final OrderCoordinate from = new OrderCoordinate(from_lat, from_lon, id);
+              final OrderCoordinate to = new OrderCoordinate(to_lat, to_lon, id);
               LocalDate d = LocalDate.parse(date);
-              Order o = new Order(volume, mass, from, to, d);
-              o.setID(id);
+              Order o = new Order(volume, mass, from, to, d, id);
               
               orders.add(o);
               
