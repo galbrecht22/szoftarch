@@ -47,7 +47,7 @@ public class DBService {
               float location_lon = rs.getFloat("location_lon");
               VehiclePark vp = new VehiclePark();
               vp.setID(id);
-              vp.setLocation(new float[]{location_lat, location_lon});
+              vp.setLocation(new Coordinate(location_lat, location_lon));
               vehicleParks.add(vp);
               
               //Display values
@@ -241,8 +241,8 @@ public class DBService {
               float to_lon = rs.getFloat("to_lon");
               String date = rs.getString("dateof_tr");
               
-              float[] from = new float[]{from_lat, from_lon};
-              float[] to = new float[]{to_lat, to_lon};
+              final Coordinate from = new Coordinate(from_lat, from_lon);
+              Coordinate to = new Coordinate(to_lat, to_lon);
               LocalDate d = LocalDate.parse(date);
               Order o = new Order(volume, mass, from, to, d);
               o.setID(id);
