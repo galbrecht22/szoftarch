@@ -1,7 +1,6 @@
 package prod;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 
 public class Order {
 	private int id;
