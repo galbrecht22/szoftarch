@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DeliveryController implements DistanceCalculator {
+
 	public void calculate(Map<Order, VehiclePark> map) {
 	}
 

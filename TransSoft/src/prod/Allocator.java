@@ -22,20 +22,20 @@ public class Allocator implements DistanceCalculator{
             float minDistance = Float.MAX_VALUE;
             final Coordinate from = order.getFrom();
             final Coordinate to = order.getTo();
-            for(VehiclePark v: vehicleParks) {
-                final Coordinate loc = v.getLocation();
-                float forth = DistanceCalculator.distFrom(loc.getLatitude(), loc.getLongitude(), from.getLatitude(), from.getLongitude());
-                float transport = DistanceCalculator.distFrom(from.getLatitude(), from.getLongitude(), to.getLatitude(), to.getLongitude());
-                float back = DistanceCalculator.distFrom(to.getLatitude(), to.getLongitude(), loc.getLatitude(), loc.getLongitude());
-                float distance = forth + transport + back;
+            for(VehiclePark vp: vehicleParks) {
+                final Coordinate loc = vp.getLocation();
+                final float forth = DistanceCalculator.distFrom(loc, from);
+                final float transport = DistanceCalculator.distFrom(from, to);
+                final float back = DistanceCalculator.distFrom(to, loc);
+                final float distance = forth + transport + back;
 
                 if(!map.containsKey(order)){
                     minDistance = distance;
-                    map.put(order, v);
+                    map.put(order, vp);
                 }
                 else if(distance < minDistance){
                     minDistance = distance;
-                    map.put(order, v);
+                    map.put(order, vp);
                 }
             }
         }
