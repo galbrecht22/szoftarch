@@ -1,10 +1,7 @@
 package bme.szoftarch.spring.model;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Queue;
+import java.util.List;
 
 public class Allocator implements DistanceCalculator{
 
@@ -18,29 +15,26 @@ public class Allocator implements DistanceCalculator{
         return allocator;
     }
 
-    public static Map<Order, VehiclePark> compute(ArrayList<VehiclePark> vehicleParks, ArrayList<Order> orders){
-        Map<Order, VehiclePark> map = new HashMap<>();
-        for(Order o: orders) {
+    public static List<VehiclePark> compute(ArrayList<VehiclePark> vehicleParks, ArrayList<Order> orders){
+        for(Order order: orders) {
             float minDistance = Float.MAX_VALUE;
-            float[] from = o.getFrom();
-            float[] to = o.getTo();
-            for(VehiclePark v: vehicleParks) {
-                float[] location = v.getLocation();
-                float forth = DistanceCalculator.distFrom(location[0], location[1], from[0], from[1]);
-                float transport = DistanceCalculator.distFrom(from[0], from[1], to[0], to[1]);
-                float back = DistanceCalculator.distFrom(to[0], to[1], location[0], location[1]);
-                float distance = forth + transport + back;
+            final Coordinate from = order.getFrom();
+            final Coordinate to = order.getTo();
+            VehiclePark vp = null;
+            for(VehiclePark park: vehicleParks) {
+                final Coordinate loc = park.getLocation();
+                final float forth = DistanceCalculator.distFrom(loc, from);
+                final float transport = DistanceCalculator.distFrom(from, to);
+                final float back = DistanceCalculator.distFrom(to, loc);
+                final float distance = forth + transport + back;
 
-                if(!map.containsKey(o)){
+                if(distance < minDistance){
                     minDistance = distance;
-                    map.put(o, v);
-                }
-                else if(distance < minDistance){
-                    minDistance = distance;
-                    map.put(o, v);
+                    vp = park;
                 }
             }
+            vp.addOrderToQueue(order);
         }
-        return map;
+        return vehicleParks;
     }
 }

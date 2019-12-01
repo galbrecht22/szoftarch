@@ -1,6 +1,7 @@
 package bme.szoftarch.spring.model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContextListener;
@@ -19,7 +20,6 @@ public class Dispatcher implements ServletContextListener {
     }
     
     private DBService dbService = new DBService();
-    //private OrderFactory orderFactory = new OrderFactory();
     private VehicleRegistry vehicleRegistry = new VehicleRegistry();
     
     public void loadModel() {
@@ -53,8 +53,7 @@ public class Dispatcher implements ServletContextListener {
     	ArrayList<Order> orders = dbService.getOrders(datemap.get("date"));
     	ArrayList<VehiclePark> vehicleParks = vehicleRegistry.getVehicleParks();
     	
-        Map<Order, VehiclePark> map = Allocator.compute(vehicleParks, orders);
-        
-        map.forEach((key, value) -> System.out.println(key.getID() + " " + value.getID()));
+        List<VehiclePark> vPs = Allocator.compute(vehicleParks, orders);
+		vPs.forEach((vP) -> System.out.println(vP.toString()));
     }
 }
