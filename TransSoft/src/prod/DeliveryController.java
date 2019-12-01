@@ -200,42 +200,22 @@ public class DeliveryController implements DistanceCalculator {
 		List<OrderCoordinate> betterPath = new ArrayList<>(vehicle.getPath().size());
 		betterPath.addAll(vehicle.getPath());
 		final List<Order> orders = vehicle.getOrders();
-		List<OrderCoordinate> previous = new ArrayList<>(vehicle.getPath().size());
-		while (!isSameRoutes(betterPath, previous)) {
-			previous.clear();
-			previous.addAll(betterPath);
-			for (int i = 1; i < betterPath.size() - 4; i++) {
-				for (int j = i + 2; j < betterPath.size() - 2; j++) {
-					final float current = DistanceCalculator.distFrom(betterPath.get(i), betterPath.get(i + 1))
-							+ DistanceCalculator.distFrom(betterPath.get(j), betterPath.get(j + 1));
-					final float swapped = DistanceCalculator.distFrom(betterPath.get(i), betterPath.get(j))
-							+ DistanceCalculator.distFrom(betterPath.get(i + 1), betterPath.get(j + 1));
-					if (current > swapped) {
-						betterPath = checkIfSwappable(betterPath, i, j, orders);
-					}
+		for (int i = 1; i < betterPath.size() - 4; i++) {
+			for (int j = i+2; j < betterPath.size() - 2; j++) {
+				final float current = DistanceCalculator.distFrom(betterPath.get(i), betterPath.get(i + 1))
+						+ DistanceCalculator.distFrom(betterPath.get(j), betterPath.get(j + 1));
+				final float swapped = DistanceCalculator.distFrom(betterPath.get(i), betterPath.get(j))
+						+ DistanceCalculator.distFrom(betterPath.get(i + 1), betterPath.get(j + 1));
+				if (current > swapped) {
+					betterPath = checkIfSwappable(betterPath, i, j, orders);
+
 				}
 			}
 		}
-
 		final Vehicle toReturn = new Vehicle(vehicle.getMax_volume(), vehicle.getMax_mass(), vehicle.getID(),
 				vehicle.getMax_speed());
 		toReturn.setPath(betterPath);
 		return toReturn;
-	}
-
-	private boolean isSameRoutes(final List<OrderCoordinate> betterPath, final List<OrderCoordinate> previous) {
-		if (betterPath == previous) {
-			return true;
-		}
-		if (betterPath.size() != previous.size()) {
-			return false;
-		}
-		for (int i = 1; i < betterPath.size() - 1; i++) {
-			if (!betterPath.get(i).equals(previous.get(i))) {
-				return false;
-			}
-		}
-		return false;
 	}
 
 	private List<OrderCoordinate> checkIfSwappable(final List<OrderCoordinate> original, final int i, final int j,
@@ -264,15 +244,15 @@ public class DeliveryController implements DistanceCalculator {
 	}
 
 	private boolean checkValidLink(final List<OrderCoordinate> route, final int i, final List<Order> orders) {
-		final OrderCoordinate nextHop = route.get(i + 1);
+		final OrderCoordinate nextHop = route.get(i+1);
 		final int nextHopId = nextHop.getId();
 		final Order order = getOrder(orders, nextHopId);
 		if (order.getFrom().equals(nextHop)) {
 			return true;
 		}
-		for (int j = 1; j <= i; j++) {
+		for(int j = 1; j <= i; j++) {
 			final OrderCoordinate coord = route.get(j);
-			if (coord.getId() == nextHopId && coord.equals(order.getFrom())) {
+			if(coord.getId() == nextHopId && coord.equals(order.getFrom())) {
 				return true;
 			}
 		}
@@ -280,8 +260,8 @@ public class DeliveryController implements DistanceCalculator {
 	}
 
 	private Order getOrder(List<Order> orders, int orderId) {
-		for (Order o : orders) {
-			if (o.getID() == orderId) {
+		for(Order o : orders) {
+			if(o.getID() == orderId) {
 				return o;
 			}
 		}
