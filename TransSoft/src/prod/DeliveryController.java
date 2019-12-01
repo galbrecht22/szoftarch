@@ -2,19 +2,27 @@ package prod;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class DeliveryController implements DistanceCalculator {
 
 	public void calculate(final List<VehiclePark> vehicleParks) {
 		scheduleOrders(vehicleParks);
-		for(VehiclePark vp : vehicleParks) {
-			for(Vehicle v : vp.getVehicles()) {
-				if(v.getOrders().isEmpty()) {
+		for (VehiclePark vp : vehicleParks) {
+			for (Vehicle v : vp.getVehicles()) {
+				if (v.getOrders().isEmpty()) {
 					continue;
 				}
 				final List<Vehicle> options = new ArrayList<Vehicle>();
 				options.add(lazyAlgorithmOnePhase(v, vp.getLocation()));
 				options.add(lazyAlgorithmTwoPhase(v, vp.getLocation()));
+				// let's take some random routes, WHO KNOWS..
+				options.add(veryLazyRandomAlgorithm(v, vp.getLocation()));
+				options.add(veryLazyRandomAlgorithm(v, vp.getLocation()));
+				options.add(veryLazyRandomAlgorithm(v, vp.getLocation()));
+				options.add(veryLazyRandomAlgorithm(v, vp.getLocation()));
+				options.add(veryLazyRandomAlgorithm(v, vp.getLocation()));
+
 				v = min(options);
 			}
 		}
@@ -23,9 +31,9 @@ public class DeliveryController implements DistanceCalculator {
 	private Vehicle min(final List<Vehicle> options) {
 		float min = Float.MAX_VALUE;
 		Vehicle minimalPathVehicle = null;
-		for(Vehicle v : options) {
+		for (Vehicle v : options) {
 			final float pathLen = v.getPathLength();
-			if(pathLen < min) {
+			if (pathLen < min) {
 				min = pathLen;
 				minimalPathVehicle = v;
 			}
@@ -33,6 +41,7 @@ public class DeliveryController implements DistanceCalculator {
 		return minimalPathVehicle;
 	}
 
+	// if incorrect, sorting vehicles might be a solution
 	private void scheduleOrders(List<VehiclePark> VehicleParks) {
 		for (VehiclePark vp : VehicleParks) {
 			// Pair Order to Vehicle by Mass
@@ -81,10 +90,12 @@ public class DeliveryController implements DistanceCalculator {
 
 	// First collect all, then deliver
 	private Vehicle lazyAlgorithmTwoPhase(final Vehicle vehicle, final Coordinate vehicleParkLocation) {
-		final List<Coordinate> pathToTake = new ArrayList<Coordinate>();
+		final List<OrderCoordinate> pathToTake = new ArrayList<>();
 		final List<Order> orders = new ArrayList<>();
 		orders.addAll(vehicle.getOrders());
-		pathToTake.add(vehicleParkLocation);
+		final OrderCoordinate vpLoc = new OrderCoordinate(vehicleParkLocation.getLatitude(),
+				vehicleParkLocation.getLongitude(), 0);
+		pathToTake.add(vpLoc);
 		// collect
 		while (orders.size() > 0) {
 			Order toAdd = null;
@@ -115,7 +126,7 @@ public class DeliveryController implements DistanceCalculator {
 			pathToTake.add(toAdd.getFrom());
 			orders.remove(toAdd);
 		}
-		pathToTake.add(vehicleParkLocation);
+		pathToTake.add(vpLoc);
 		final Vehicle v = new Vehicle(vehicle.getMax_volume(), vehicle.getMax_mass(), vehicle.getID(),
 				vehicle.getMax_speed());
 		v.setPath(pathToTake);
@@ -124,8 +135,10 @@ public class DeliveryController implements DistanceCalculator {
 
 	// It can deliver while collecting (always the closest possible destination)
 	private Vehicle lazyAlgorithmOnePhase(final Vehicle vehicle, final Coordinate vehicleParkLocation) {
-		final List<Coordinate> pathToTake = new ArrayList<Coordinate>();
-		pathToTake.add(vehicleParkLocation);
+		final List<OrderCoordinate> pathToTake = new ArrayList<>();
+		final OrderCoordinate vpLoc = new OrderCoordinate(vehicleParkLocation.getLatitude(),
+				vehicleParkLocation.getLongitude(), 0);
+		pathToTake.add(vpLoc);
 		final List<Order> orders = new ArrayList<>();
 		orders.addAll(vehicle.getOrders());
 		final List<OrderCoordinate> availableDestinations = getFroms(orders);
@@ -142,7 +155,7 @@ public class DeliveryController implements DistanceCalculator {
 			pathToTake.add(toAdd);
 			addNewAvailableDestinationIfPossible(availableDestinations, toAdd, orders);
 		}
-		pathToTake.add(vehicleParkLocation);
+		pathToTake.add(vpLoc);
 		final Vehicle v = new Vehicle(vehicle.getMax_volume(), vehicle.getMax_mass(), vehicle.getID(),
 				vehicle.getMax_speed());
 		v.setPath(pathToTake);
@@ -159,11 +172,111 @@ public class DeliveryController implements DistanceCalculator {
 		}
 	}
 
-//	private Vehicle veryLazyRandomAlgorithm(final List<Order> orders) {
-//		final List<Coordinate> pathToTake = new ArrayList<Coordinate>();
-//		// TODO
-//		return null;
-//	}
+	private Vehicle veryLazyRandomAlgorithm(final Vehicle vehicle, final Coordinate vehicleParkLocation) {
+		final List<OrderCoordinate> pathToTake = new ArrayList<>();
+		final OrderCoordinate vpLoc = new OrderCoordinate(vehicleParkLocation.getLatitude(),
+				vehicleParkLocation.getLongitude(), 0);
+		pathToTake.add(vpLoc);
+		final List<Order> orders = new ArrayList<>();
+		orders.addAll(vehicle.getOrders());
+		final List<OrderCoordinate> availableDestinations = getFroms(orders);
+		while (availableDestinations.size() > 0) {
+			int index = new Random().nextInt(orders.size()) % (orders.size() - 1);
+			OrderCoordinate toAdd = availableDestinations.get(index);
+			pathToTake.add(toAdd);
+			addNewAvailableDestinationIfPossible(availableDestinations, toAdd, orders);
+		}
+		pathToTake.add(vpLoc);
+		final Vehicle toReturn = new Vehicle(vehicle.getMax_volume(), vehicle.getMax_mass(), vehicle.getID(),
+				vehicle.getMax_speed());
+		toReturn.setPath(pathToTake);
+		return toReturn;
+	}
+
+	private Vehicle enhanceAlgorithm2_opt(final Vehicle vehicle) {
+		List<OrderCoordinate> betterPath = vehicle.getPath();
+		final List<Order> orders = vehicle.getOrders();
+		for (int i = 1; i < betterPath.size() - 4; i++) {
+			for (int j = i+2; j < betterPath.size() - 2; j++) {
+				final float current = DistanceCalculator.distFrom(betterPath.get(i), betterPath.get(i + 1))
+						+ DistanceCalculator.distFrom(betterPath.get(j), betterPath.get(j + 1));
+				final float swapped = DistanceCalculator.distFrom(betterPath.get(i), betterPath.get(j))
+						+ DistanceCalculator.distFrom(betterPath.get(i + 1), betterPath.get(j + 1));
+				if (current > swapped) {
+					betterPath = checkIfSwappable(betterPath, i, j, orders);
+
+				}
+			}
+		}
+		final Vehicle toReturn = new Vehicle(vehicle.getMax_volume(), vehicle.getMax_mass(), vehicle.getID(),
+				vehicle.getMax_speed());
+		toReturn.setPath(betterPath);
+		return toReturn;
+	}
+
+	private List<OrderCoordinate> checkIfSwappable(final List<OrderCoordinate> original, final int i, final int j,
+			final List<Order> orders) {
+		List<OrderCoordinate> copy = new ArrayList<>();
+		copy.addAll(original);
+		copy = swapRoute(copy, i, j);
+		if (checkRouteCorrectness(copy, orders)) {
+			return copy;
+		} else {
+			return original;
+		}
+
+	}
+
+	private boolean checkRouteCorrectness(final List<OrderCoordinate> route, final List<Order> orders) {
+		// from 0 -> 1 is always correct
+		// from n-2 to n-1 is always correct (n is route.size())
+		// because 0 and n-2 are the same VehiclePark.
+		for (int i = 1; i < route.size() - 2; i++) {
+			if (!checkValidLink(route, i, orders)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean checkValidLink(final List<OrderCoordinate> route, final int i, final List<Order> orders) {
+		final OrderCoordinate nextHop = route.get(i+1);
+		final int nextHopId = nextHop.getId();
+		final Order order = getOrder(orders, nextHopId);
+		if (order.getFrom().equals(nextHop)) {
+			return true;
+		}
+		for(int j = 1; j <= i; j++) {
+			final OrderCoordinate coord = route.get(j);
+			if(coord.getId() == nextHopId && coord.equals(order.getFrom())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private Order getOrder(List<Order> orders, int orderId) {
+		for(Order o : orders) {
+			if(o.getID() == orderId) {
+				return o;
+			}
+		}
+		return null;
+	}
+
+	private List<OrderCoordinate> swapRoute(final List<OrderCoordinate> route, final int i, final int j) {
+		final List<OrderCoordinate> newPath = new ArrayList<>(route.size());
+		for (int k = 0; k <= i; k++) {
+			newPath.add(route.get(k));
+		}
+		for (int k = j; k >= i + 1; k--) {
+			newPath.add(route.get(k));
+		}
+		for (int k = j + 1; k < route.size(); k++) {
+			newPath.add(route.get(k));
+		}
+		return newPath;
+	}
 
 	private List<OrderCoordinate> getFroms(final List<Order> orders) {
 		final List<OrderCoordinate> froms = new ArrayList<>();

@@ -10,7 +10,7 @@ public class Vehicle {
 	private int max_speed;
 	private int vehiclePark_id;
 	private List<Order> orders;
-	private List<Coordinate> path;
+	private List<OrderCoordinate> path;
 
 	public Vehicle(final double max_volume, final double max_mass, final int vehicle_id, final int max_speed) {
 		this.max_volume = max_volume;
@@ -18,7 +18,7 @@ public class Vehicle {
 		this.vehicle_id = vehicle_id;
 		this.max_speed = max_speed;
 		this.orders = new ArrayList<Order>();
-		this.path = new ArrayList<Coordinate>();
+		this.path = new ArrayList<OrderCoordinate>();
 	}
 
 	public void setVehiclePark_ID(final int vp_id) {
@@ -69,11 +69,11 @@ public class Vehicle {
 		return orders;
 	}
 
-	public void setPath(final List<Coordinate> path) {
+	public void setPath(final List<OrderCoordinate> path) {
 		this.path = path;
 	}
 
-	public List<Coordinate> getPath() {
+	public List<OrderCoordinate> getPath() {
 		return path;
 	}
 

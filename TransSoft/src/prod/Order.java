@@ -3,16 +3,8 @@ package prod;
 import java.time.LocalDate;
 
 public class Order {
+	
 	private int id;
-
-	public int getID() {
-		return id;
-	}
-
-	public void setID(int id) {
-		this.id = id;
-	}
-
 	private double volume;
 	private double mass;
 	private OrderCoordinate from;
@@ -26,6 +18,14 @@ public class Order {
 		this.from = from;
 		this.to = to;
 		this.when = when;
+		this.id = id;
+	}
+	
+	public int getID() {
+		return id;
+	}
+	
+	public void setID(int id) {
 		this.id = id;
 	}
 
@@ -45,7 +45,7 @@ public class Order {
 		this.mass = mass;
 	}
 
-	public Coordinate getFrom() {
+	public OrderCoordinate getFrom() {
 		return from;
 	}
 
@@ -53,7 +53,7 @@ public class Order {
 		this.from = from;
 	}
 
-	public Coordinate getTo() {
+	public OrderCoordinate getTo() {
 		return to;
 	}
 
