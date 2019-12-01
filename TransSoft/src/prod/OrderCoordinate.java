@@ -18,7 +18,7 @@ public class OrderCoordinate extends Coordinate {
 	}
 
 	public boolean equals(OrderCoordinate oc) {
-		if(getLatitude() == oc.getLatitude() && getLongitude() == oc.getLongitude()) {
+		if(getLatitude() == oc.getLatitude() && getLongitude() == oc.getLongitude() && getId() == oc.getId()) {
 			return true;
 		} else {
 			return false;
