@@ -22,7 +22,10 @@ public class DeliveryController implements DistanceCalculator {
 				options.add(veryLazyRandomAlgorithm(v, vp.getLocation()));
 				options.add(veryLazyRandomAlgorithm(v, vp.getLocation()));
 				options.add(veryLazyRandomAlgorithm(v, vp.getLocation()));
-
+				options.add(enhanceAlgorithm2_opt(options.get(0)));
+				options.add(enhanceAlgorithm2_opt(options.get(1)));
+				options.add(enhanceAlgorithm2_opt(options.get(2)));
+				options.add(enhanceAlgorithm2_opt(options.get(3)));
 				v = min(options);
 			}
 		}
@@ -194,7 +197,8 @@ public class DeliveryController implements DistanceCalculator {
 	}
 
 	private Vehicle enhanceAlgorithm2_opt(final Vehicle vehicle) {
-		List<OrderCoordinate> betterPath = vehicle.getPath();
+		List<OrderCoordinate> betterPath = new ArrayList<>(vehicle.getPath().size());
+		betterPath.addAll(vehicle.getPath());
 		final List<Order> orders = vehicle.getOrders();
 		for (int i = 1; i < betterPath.size() - 4; i++) {
 			for (int j = i+2; j < betterPath.size() - 2; j++) {
