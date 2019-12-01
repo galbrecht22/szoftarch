@@ -14,11 +14,11 @@ public class DeliveryController implements DistanceCalculator {
 					continue;
 				}
 				final List<Vehicle> options = new ArrayList<Vehicle>();
-				options.add(lazyAlgorithmOnePhase(v, vp.getLocation()));
-				options.add(lazyAlgorithmTwoPhase(v, vp.getLocation()));
+				options.add(lazyAlgorithmOnePhase(v, vp.getLocation())); //0
+				options.add(lazyAlgorithmTwoPhase(v, vp.getLocation())); //1
 				// let's take some random routes, WHO KNOWS..
-				options.add(veryLazyRandomAlgorithm(v, vp.getLocation()));
-				options.add(veryLazyRandomAlgorithm(v, vp.getLocation()));
+				options.add(veryLazyRandomAlgorithm(v, vp.getLocation())); //2
+				options.add(veryLazyRandomAlgorithm(v, vp.getLocation())); //3
 				options.add(veryLazyRandomAlgorithm(v, vp.getLocation()));
 				options.add(veryLazyRandomAlgorithm(v, vp.getLocation()));
 				options.add(veryLazyRandomAlgorithm(v, vp.getLocation()));
