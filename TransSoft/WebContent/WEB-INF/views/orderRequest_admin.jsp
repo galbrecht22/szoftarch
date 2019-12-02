@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <body>
-<form action="orderSubmitted" method="post">
+<form action="orderSubmitted_admin" method="post">
 	<table>
 	<tr>
 		<td><font face="consolas" size="2px">From(lat):</font></td>
@@ -40,7 +40,15 @@
 	</table>
 		<input type="submit" value="OrderRequest">
 </form>
+<form action="computeRequest" method="post">
+	<table>
+		<tr>
+			<td><input type="submit" name="action" value="Compute"/></td>
+			<td><input type="text" name="computeDate"></td>
+		</tr>
+	</table>
 
-<a href="/TransSoft/login">Login</a>
+</form>
+<a href="/TransSoft">Logout</a>
 </body>
 </html>
