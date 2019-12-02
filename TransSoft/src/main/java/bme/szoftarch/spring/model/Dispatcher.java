@@ -21,6 +21,7 @@ public class Dispatcher implements ServletContextListener {
     
     private DBService dbService = new DBService();
     private VehicleRegistry vehicleRegistry = new VehicleRegistry();
+    private DeliveryController deliveryController = new DeliveryController();
     
     public void loadModel() {
     	ArrayList<VehiclePark> vehicleParks = dbService.loadVehicleParks();
@@ -55,5 +56,7 @@ public class Dispatcher implements ServletContextListener {
     	
         List<VehiclePark> vPs = Allocator.compute(vehicleParks, orders);
 		vPs.forEach((vP) -> System.out.println(vP.toString()));
+		deliveryController.calculate(vPs);
+		System.out.println("deliveryController ended.");
     }
 }

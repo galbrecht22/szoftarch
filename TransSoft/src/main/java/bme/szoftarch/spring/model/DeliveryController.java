@@ -7,26 +7,96 @@ import java.util.Random;
 public class DeliveryController implements DistanceCalculator {
 
 	public void calculate(final List<VehiclePark> vehicleParks) {
-		scheduleOrders(vehicleParks);
 		for (VehiclePark vp : vehicleParks) {
+			System.out.println(vp.getID());
+			System.out.println(vp.getOrders());
 			for (Vehicle v : vp.getVehicles()) {
+				System.out.println(v.getID());
+			}
+		}
+		System.out.println("Scheduling orders...");
+		scheduleOrders(vehicleParks);
+		System.out.println("Scheduling done.");
+		for (VehiclePark vp : vehicleParks) {
+			System.out.println(vp.getID());
+			System.out.println(vp.getVehicles());
+			System.out.println(vp.getVehicles().get(0).getMax_mass());
+			System.out.println(vp.getVehicles().get(0).getMax_volume());
+			System.out.println(vp.getVehicles());
+			System.out.println(vp.getOrders());
+			System.out.println(vp.getOrders().get(0).getMass());
+			System.out.println(vp.getOrders().get(0).getVolume());
+
+			for (Vehicle v : vp.getVehicles()) {
+				System.out.println(v.getID());
+				System.out.println(v.getMax_mass());
+				System.out.println(v.getMax_volume());
+				System.out.println(v.getOrders());
 				if (v.getOrders().isEmpty()) {
+					System.out.println("Empty vehicle");
 					continue;
 				}
 				final List<Vehicle> options = new ArrayList<Vehicle>();
-				options.add(lazyAlgorithmOnePhase(v, vp.getLocation())); //0
+				
+				System.out.println("Adding options...");
+				
+//				System.out.println("Adding option...");
+//				options.add(lazyAlgorithmOnePhase(v, vp.getLocation())); //0
+//				System.out.println("Adding done.");
+
+				System.out.println("Adding option...");
 				options.add(lazyAlgorithmTwoPhase(v, vp.getLocation())); //1
+				System.out.println("Adding done.");
+
 				// let's take some random routes, WHO KNOWS..
-				options.add(veryLazyRandomAlgorithm(v, vp.getLocation())); //2
-				options.add(veryLazyRandomAlgorithm(v, vp.getLocation())); //3
-				options.add(veryLazyRandomAlgorithm(v, vp.getLocation()));
-				options.add(veryLazyRandomAlgorithm(v, vp.getLocation()));
-				options.add(veryLazyRandomAlgorithm(v, vp.getLocation()));
-				options.add(enhanceAlgorithm2_opt(options.get(0)));
-				options.add(enhanceAlgorithm2_opt(options.get(1)));
-				options.add(enhanceAlgorithm2_opt(options.get(2)));
-				options.add(enhanceAlgorithm2_opt(options.get(3)));
+				
+//				System.out.println("Adding option...");
+//				options.add(veryLazyRandomAlgorithm(v, vp.getLocation())); //2
+//				System.out.println("Adding done.");
+//
+//				System.out.println("Adding option...");
+//				options.add(veryLazyRandomAlgorithm(v, vp.getLocation())); //3
+//				System.out.println("Adding done.");
+//				
+//				System.out.println("Adding option...");
+//				options.add(veryLazyRandomAlgorithm(v, vp.getLocation()));
+//				System.out.println("Adding done.");
+//				
+//				System.out.println("Adding option...");
+//				options.add(veryLazyRandomAlgorithm(v, vp.getLocation()));
+//				System.out.println("Adding done.");
+//				
+//				System.out.println("Adding option...");
+//				options.add(veryLazyRandomAlgorithm(v, vp.getLocation()));
+//				System.out.println("Adding done.");
+				
+//				System.out.println("Adding option...");
+//				options.add(enhanceAlgorithm2_opt(options.get(0)));
+//				System.out.println("Adding done.");
+//				
+//				System.out.println("Adding option...");
+//				options.add(enhanceAlgorithm2_opt(options.get(1)));
+//				System.out.println("Adding done.");
+				
+//				System.out.println("Adding option...");
+//				options.add(enhanceAlgorithm2_opt(options.get(2)));
+//				System.out.println("Adding done.");
+//				
+//				System.out.println("Adding option...");
+//				options.add(enhanceAlgorithm2_opt(options.get(3)));
+//				System.out.println("Adding done.");
+				
+				System.out.println("Addings done.");
+
+				System.out.println("Computing options...");
 				v = min(options);
+				System.out.println("Computing done.");
+				
+				System.out.println(v.getID());
+				System.out.println(v.getOrders());
+				System.out.println(v.getPath());
+				System.out.println(v.getPathLength());
+				
 			}
 		}
 	}
@@ -61,25 +131,23 @@ public class DeliveryController implements DistanceCalculator {
 	}
 
 	private VehiclePark assignOrdersToVehiclesByMass(final VehiclePark vehiclePark) {
-		final VehiclePark vp = vehiclePark.copy();
-		final List<Order> orders = vp.getOrders();
+		final List<Order> orders = vehiclePark.getOrders();
 		orders.sort(new OrderComparatorOnMass());
-		final List<Vehicle> vehicles = vp.getVehicles();
+		final List<Vehicle> vehicles = vehiclePark.getVehicles();
 		for (Order o : orders) {
 			fitInVehicle(o, vehicles);
 		}
-		return vp;
+		return vehiclePark;
 	}
 
 	private VehiclePark assignOrdersToVehiclesByVolume(final VehiclePark vehiclePark) {
-		final VehiclePark vp = vehiclePark.copy();
-		final List<Order> orders = vp.getOrders();
+		final List<Order> orders = vehiclePark.getOrders();
 		orders.sort(new OrderComparatorOnVolume());
-		final List<Vehicle> vehicles = vp.getVehicles();
+		final List<Vehicle> vehicles = vehiclePark.getVehicles();
 		for (Order o : orders) {
 			fitInVehicle(o, vehicles);
 		}
-		return vp;
+		return vehiclePark;
 	}
 
 	private void fitInVehicle(final Order order, final List<Vehicle> vehicles) {
@@ -126,7 +194,7 @@ public class DeliveryController implements DistanceCalculator {
 					toAdd = o;
 				}
 			}
-			pathToTake.add(toAdd.getFrom());
+			pathToTake.add(toAdd.getTo());
 			orders.remove(toAdd);
 		}
 		pathToTake.add(vpLoc);
@@ -157,6 +225,7 @@ public class DeliveryController implements DistanceCalculator {
 			}
 			pathToTake.add(toAdd);
 			addNewAvailableDestinationIfPossible(availableDestinations, toAdd, orders);
+			availableDestinations.remove(toAdd);
 		}
 		pathToTake.add(vpLoc);
 		final Vehicle v = new Vehicle(vehicle.getMax_volume(), vehicle.getMax_mass(), vehicle.getID(),
@@ -188,6 +257,7 @@ public class DeliveryController implements DistanceCalculator {
 			OrderCoordinate toAdd = availableDestinations.get(index);
 			pathToTake.add(toAdd);
 			addNewAvailableDestinationIfPossible(availableDestinations, toAdd, orders);
+			availableDestinations.remove(toAdd);
 		}
 		pathToTake.add(vpLoc);
 		final Vehicle toReturn = new Vehicle(vehicle.getMax_volume(), vehicle.getMax_mass(), vehicle.getID(),
