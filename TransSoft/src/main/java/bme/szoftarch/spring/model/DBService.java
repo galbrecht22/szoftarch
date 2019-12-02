@@ -305,4 +305,43 @@ public class DBService {
         System.out.println("Goodbye!");
         return orders;
 	}
+	
+	public String deleteOrder(int id) {
+		Connection c = null;
+        PreparedStatement pstmt = null;
+        int i = 0;
+        
+        String message = null;
+        
+        try {
+            Class.forName("org.sqlite.JDBC");
+            String url="jdbc:sqlite:db\\transsoft.db";
+            System.out.println(url);
+            c = DriverManager.getConnection(url);
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
+            
+            String sql = "DELETE FROM orders WHERE id=?";
+            
+            pstmt = c.prepareStatement(sql);
+            
+            pstmt.setInt(1, id);
+
+            i = pstmt.executeUpdate();
+            if(i == 0) {
+            	message = "There's no order in database with this ID.";
+            }
+            else {
+            	message = "Order with ID " + id + " deleted successfully.";
+                System.out.println(i + " record deleted successfully");
+            }
+            pstmt.close();
+            c.commit();
+            c.close();
+         } catch ( Exception e ) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
+         }
+         return message;
+	}
 }

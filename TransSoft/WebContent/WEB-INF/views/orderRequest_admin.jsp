@@ -40,15 +40,28 @@
 	</table>
 		<input type="submit" value="OrderRequest">
 </form>
+
 <form action="computeRequest" method="post">
 	<table>
 		<tr>
 			<td><input type="submit" name="action" value="Compute"/></td>
+			<td><font face="consolas" size="2px">For date:</font></td>
 			<td><input type="text" name="computeDate"></td>
 		</tr>
 	</table>
-
 </form>
+
+<form action="deleteRequest" method="post">
+	<table>
+		<tr>
+			<td><input type="submit" name="delete" value="Delete"/></td>
+			<td><font face="consolas" size="2px">Order ID:</font></td>
+			<td><input type="text" name="deleteid"></td>
+		</tr>
+	</table>
+</form>
+
 <a href="/TransSoft">Logout</a>
+
 </body>
 </html>

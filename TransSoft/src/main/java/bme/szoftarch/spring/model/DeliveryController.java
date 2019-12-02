@@ -7,31 +7,31 @@ import java.util.Random;
 public class DeliveryController implements DistanceCalculator {
 
 	public void calculate(final List<VehiclePark> vehicleParks) {
-		for (VehiclePark vp : vehicleParks) {
-			System.out.println(vp.getID());
-			System.out.println(vp.getOrders());
-			for (Vehicle v : vp.getVehicles()) {
-				System.out.println(v.getID());
-			}
-		}
+//		for (VehiclePark vp : vehicleParks) {
+//			System.out.println(vp.getID());
+//			System.out.println(vp.getOrders());
+//			for (Vehicle v : vp.getVehicles()) {
+//				System.out.println(v.getID());
+//			}
+//		}
 		System.out.println("Scheduling orders...");
 		scheduleOrders(vehicleParks);
 		System.out.println("Scheduling done.");
 		for (VehiclePark vp : vehicleParks) {
-			System.out.println(vp.getID());
-			System.out.println(vp.getVehicles());
-			System.out.println(vp.getVehicles().get(0).getMax_mass());
-			System.out.println(vp.getVehicles().get(0).getMax_volume());
-			System.out.println(vp.getVehicles());
-			System.out.println(vp.getOrders());
-			System.out.println(vp.getOrders().get(0).getMass());
-			System.out.println(vp.getOrders().get(0).getVolume());
+//			System.out.println(vp.getID());
+//			System.out.println(vp.getVehicles());
+//			System.out.println(vp.getVehicles().get(0).getMax_mass());
+//			System.out.println(vp.getVehicles().get(0).getMax_volume());
+//			System.out.println(vp.getVehicles());
+//			System.out.println(vp.getOrders());
+//			System.out.println(vp.getOrders().get(0).getMass());
+//			System.out.println(vp.getOrders().get(0).getVolume());
 
 			for (Vehicle v : vp.getVehicles()) {
-				System.out.println(v.getID());
-				System.out.println(v.getMax_mass());
-				System.out.println(v.getMax_volume());
-				System.out.println(v.getOrders());
+//				System.out.println(v.getID());
+//				System.out.println(v.getMax_mass());
+//				System.out.println(v.getMax_volume());
+//				System.out.println(v.getOrders());
 				if (v.getOrders().isEmpty()) {
 					System.out.println("Empty vehicle");
 					continue;
@@ -89,13 +89,18 @@ public class DeliveryController implements DistanceCalculator {
 				System.out.println("Addings done.");
 
 				System.out.println("Computing options...");
-				v = min(options);
-				System.out.println("Computing done.");
 				
 				System.out.println(v.getID());
 				System.out.println(v.getOrders());
-				System.out.println(v.getPath());
-				System.out.println(v.getPathLength());
+				
+				//v = min(options);
+				min2(options, v);
+				System.out.println("Computing done.");
+				
+//				System.out.println(v.getID());
+//				System.out.println(v.getOrders());
+//				System.out.println(v.getPath());
+//				System.out.println(v.getPathLength());
 				
 			}
 		}
@@ -112,6 +117,19 @@ public class DeliveryController implements DistanceCalculator {
 			}
 		}
 		return minimalPathVehicle;
+	}
+	
+	private void min2(final List<Vehicle> options, Vehicle vehicle) {
+		float min = Float.MAX_VALUE;
+		Vehicle minimalPathVehicle = null;
+		for (Vehicle v : options) {
+			final float pathLen = v.getPathLength();
+			if (pathLen < min) {
+				min = pathLen;
+				minimalPathVehicle = v;
+			}
+		}
+		vehicle.setPath(minimalPathVehicle.getPath());
 	}
 
 	// if incorrect, sorting vehicles might be a solution
@@ -168,7 +186,8 @@ public class DeliveryController implements DistanceCalculator {
 				vehicleParkLocation.getLongitude(), 0);
 		pathToTake.add(vpLoc);
 		// collect
-		while (orders.size() > 0) {
+		//while (orders.size() > 0) {
+		for (int i = 0; i < orders.size() * 2; i++) {
 			Order toAdd = null;
 			float minDist = Float.MAX_VALUE;
 			for (Order o : orders) {
@@ -184,7 +203,8 @@ public class DeliveryController implements DistanceCalculator {
 
 		// deliver
 		orders.addAll(vehicle.getOrders());
-		while (orders.size() > 0) {
+		//while (orders.size() > 0) {
+		for (int i = 0; i < orders.size() * 2; i++) {
 			Order toAdd = null;
 			float minDist = Float.MAX_VALUE;
 			for (Order o : orders) {
@@ -213,7 +233,8 @@ public class DeliveryController implements DistanceCalculator {
 		final List<Order> orders = new ArrayList<>();
 		orders.addAll(vehicle.getOrders());
 		final List<OrderCoordinate> availableDestinations = getFroms(orders);
-		while (availableDestinations.size() > 0) {
+		//while (availableDestinations.size() > 0) {
+		for (int i = 0; i < orders.size() * 2; i++) {
 			OrderCoordinate toAdd = null;
 			float minDist = Float.MAX_VALUE;
 			for (OrderCoordinate oc : availableDestinations) {
