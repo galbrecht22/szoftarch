@@ -61,25 +61,23 @@ public class DeliveryController implements DistanceCalculator {
 	}
 
 	private VehiclePark assignOrdersToVehiclesByMass(final VehiclePark vehiclePark) {
-		final VehiclePark vp = vehiclePark.copy();
-		final List<Order> orders = vp.getOrders();
+		final List<Order> orders = vehiclePark.getOrders();
 		orders.sort(new OrderComparatorOnMass());
-		final List<Vehicle> vehicles = vp.getVehicles();
+		final List<Vehicle> vehicles = vehiclePark.getVehicles();
 		for (Order o : orders) {
 			fitInVehicle(o, vehicles);
 		}
-		return vp;
+		return vehiclePark;
 	}
 
 	private VehiclePark assignOrdersToVehiclesByVolume(final VehiclePark vehiclePark) {
-		final VehiclePark vp = vehiclePark.copy();
-		final List<Order> orders = vp.getOrders();
+		final List<Order> orders = vehiclePark.getOrders();
 		orders.sort(new OrderComparatorOnVolume());
-		final List<Vehicle> vehicles = vp.getVehicles();
+		final List<Vehicle> vehicles = vehiclePark.getVehicles();
 		for (Order o : orders) {
 			fitInVehicle(o, vehicles);
 		}
-		return vp;
+		return vehiclePark;
 	}
 
 	private void fitInVehicle(final Order order, final List<Vehicle> vehicles) {
