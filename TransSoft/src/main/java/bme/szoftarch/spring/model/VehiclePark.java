@@ -7,11 +7,12 @@ import java.util.List;
 public class VehiclePark {
 	private ArrayList<Vehicle> vehicles;
 	private Coordinate location;
-	private List<Order> orders = new ArrayList<>();
+	private List<Order> orders;
 	private int id;
 
 	public VehiclePark() {
-		vehicles = new ArrayList<>();
+		vehicles = new ArrayList<Vehicle>();
+		orders = new ArrayList<Order>();
 	}
 
 	public int getID() {
@@ -27,7 +28,7 @@ public class VehiclePark {
 	}
 
 	public void addOrders(final Collection<Order> orders) {
-		orders.addAll(orders);
+		this.orders.addAll(orders);
 	}
 
 	public List<Order> getOrders() {
@@ -84,10 +85,10 @@ public class VehiclePark {
 
 	public VehiclePark copy() {
 		final VehiclePark vp = new VehiclePark();
-		vp.setID(getID());
-		vp.setLocation(getLocation());
-		vp.addVehicles(getVehicles());
-		vp.addOrders(getOrders());
+		vp.setID(this.getID());
+		vp.setLocation(this.getLocation());
+		vp.addVehicles(this.getVehicles());
+		vp.addOrders(this.getOrders());
 		return vp;
 	}
 
